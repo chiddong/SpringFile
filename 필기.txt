@@ -1,0 +1,33 @@
+
+
+1. pom.xml
+	- 자바 11
+	- 스프링 5.0.7
+	
+2. web.xml
+	- 필터 추가
+	
+3. pom.xml
+	- 의존성 추가
+	- MyBatis
+	- Spring Fileupload
+	
+4. 설정
+	- MyBatis
+	- Spring Fileupload
+
+5. 파일 생성
+	- com.test.file 	> "BoardController.java"
+							> "BoardDAO.java (I)"
+							> "BoardDAOImpl.java"
+							> "BoardDTO.java"
+							> "FileDTO.java"
+							
+	- views 				> "list.jsp"
+							> "add.jsp"
+							> "veiw.jsp"		
+							
+	- webapp 			> resource > "files" 폴더 생성 (업로드 되는 파일들을 담을 경로)
+	- "db.sql"
+	
+	

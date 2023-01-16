@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd">
+	
+	
+	<!-- Connection 클래스 역할 -->
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
+      <property name="driverClassName" value="oracle.jdbc.driver.OracleDriver"></property>
+      <property name="url" value="jdbc:oracle:thin:@localhost:1521:xe"></property>
+      <property name="username" value="hr"></property>
+      <property name="password" value="java1234"></property>
+   </bean>
+   
+   <!-- 
+   		dataSource을 의존주입 받고 FacotryBean에 의존주입하는 역할로 끼어들기함
+   		어떤 db 작업을 했는지 로그로 남겨주는 역할을 하는 애임
+   -->
+   <bean id="log4j" class="net.sf.log4jdbc.Log4jdbcProxyDataSource">
+      <constructor-arg ref="dataSource"></constructor-arg>
+      <property name="logFormatter">
+         <bean class="net.sf.log4jdbc.tools.Log4JdbcCustomFormatter">
+            <property name="loggingType" value="MULTI_LINE"></property>
+            <property name="sqlPrefix" value="[SQL] "></property>
+         </bean>
+      </property>
+   </bean> 
+  
+
+   <!-- 
+	   MyBatis 설정 (JDBC에 부합되는 애가 없음), dataSource를 의존주입한 상태 
+		이 DB에서 MyBatis로 뭔가 한다!   
+   -->
+   <bean id="sessionfactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+      <property name="dataSource" ref="log4j"></property>
+      <property name="mapperLocations" value="classpath*:com/test/file/mapper/*.xml"></property>
+      <property name="configLocation" value="/WEB-INF/mybatis.xml"></property>
+   </bean>
+      
+      <!-- Statement, ResultSet 클래스 역할 -->
+   <bean class="org.mybatis.spring.SqlSessionTemplate">
+      <constructor-arg ref="sessionfactory"></constructor-arg>
+   </bean>
+   
+   <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+   		<property name="maxUploadSize" value="104857600"></property>
+   </bean>
+   
+   
+		
+</beans>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
